@@ -55,8 +55,8 @@ Checker = (function() {
       return m.test(v);
     }
     _ref = $.map(m.split(':'), $.trim), type = _ref[0], arg = _ref[1], sec = _ref[2];
-    if (type === 'same-as' && $(arg).length !== 1) {
-      throw new Error('same-as selector must target one and only one element');
+    if ((type === 'same-as' || type === 'less-than' || type === 'greater-than') && $(arg).length !== 1) {
+      throw new Error("" + type + " selector must target one and only one element");
     }
     if (!v && type !== 'presence' && type !== 'one-of') {
       return true;
@@ -72,6 +72,10 @@ Checker = (function() {
         return v !== arg;
       case 'same-as':
         return v === $(arg).val();
+      case 'less-than':
+        return v < $(arg).val();
+      case 'greater-than':
+        return v > $(arg).val();
       case 'min-num':
         return +v >= +arg;
       case 'max-num':

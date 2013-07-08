@@ -43,8 +43,8 @@ class Checker
 
     [ type, arg, sec ] = $.map m.split( ':' ) , $.trim
 
-    if type == 'same-as' and $( arg ).length isnt 1    # Special case
-      throw new Error 'same-as selector must target one and only one element'
+    if type in ['same-as', 'less-than', 'greater-than'] and $( arg ).length isnt 1    # Special case
+      throw new Error "#{type} selector must target one and only one element"
 
     # Unless we're checking for presence or one-of then return true if no value
     if !v and type isnt 'presence' and type isnt 'one-of'
@@ -56,6 +56,8 @@ class Checker
       when 'exact'        then v == arg
       when 'not'          then v != arg
       when 'same-as'      then v == $( arg ).val()
+      when 'less-than'    then v < $( arg ).val()
+      when 'greater-than' then v > $( arg ).val()
       when 'min-num'      then +v >= +arg
       when 'max-num'      then +v <= +arg
       when 'between-num'  then +v >= +arg and +v <= +sec
